@@ -1,0 +1,80 @@
+services:
+  database:
+    image: postgres:13.22-trixie
+    container_name: s-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - swyw
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  #Microservicio de Autenticacion
+  auth-service:
+    build:
+      context: ./SWYW-AUTH
+      dockerfile: Dockerfile
+    container_name: swyw-auth
+    environment:
+      DB_HOST: database
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    ports:
+      - "4000:4000"
+
+    networks:
+      - swyw
+    depends_on:
+      database:
+        condition: service_healthy
+    healthcheck:
+      test:
+        ["CMD-SHELL", "wget --spider -q http://localhost:4000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  #Microservicio de eventos
+  event-service:
+    build:
+      context: ./SWYW-BACKEND
+      dockerfile: Dockerfile
+    container_name: swyw-backend
+    environment:
+      PORT: ${PORT}
+      DATABASE_URL: ${DATABASE_URL}
+      TYPE_DATABASE: ${TYPE_DATABASE}
+      GEMINI_API_KEYI: ${GEMINI_API_KEYI}
+      ENV_MODEL_AI: ${ENV_MODEL_AI}
+
+    ports:
+      - "3002:3000"
+    networks:
+      - swyw
+    depends_on:
+      database:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+#Network
+
+networks:
+  swyw:
+    driver: bridge
+    name: swyw
+
+volumes:
+  postgres_data:
+    driver: local
