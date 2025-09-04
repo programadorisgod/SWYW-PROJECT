@@ -206,4 +206,4 @@ Este proyecto estamos aplicando los siguientes conceptos de containerización y 
 7. **Full Stack**: Integración completa entre backend, base de datos y frontend
 
 
-**SWYW Project** - Desarrollado con 💚 siguiendo las mejores prácticas de ingeniería de software.
+**SWYW Project** - Desarrollado con 💚 siguiendo las mejores prácticas de ingeniería de software. 
