@@ -2,6 +2,7 @@
 
 # Node.js dependencies from backend
 SWYW-BACKEND/node_modules/
+SWYW-FRONTEND/node_modules/
 node_modules/
 
 # Go executable from auth service
@@ -22,7 +23,10 @@ SWYW-BACKEND/.env
 SWYW-BACKEND/.env.local
 SWYW-BACKEND/.env.production
 SWYW-BACKEND/.env.development
-
+SWYW-FRONTEND/.env
+SWYW-FRONTEND/.env.local
+SWYW-FRONTEND/.env.production
+SWYW-FRONTEND/.env.development
 # Docker related
 .dockerignore
 

@@ -86,17 +86,56 @@ Este README incluye:
 Para el despliegue completo del stack utilizando Docker Compose:
 
 ```bash
-# Levantar todo el stack
-docker-compose up --build
+# limpiar los contenedores anteriores (si no tienes más contenedores)
+docker rm -f $(docker ps -a -q)
 
-# Ejecutar en segundo plano
-docker-compose up -d --build
+
+#limpiar solo los ejeecutados anteriormente
+docker ps
+
+docker rm -f [id] [id] #id de los containers
+```
+
+```bash
+
+
+# Levantar todo el stack
+docker compose --env-file .env up -d
+
+# Levantar con modificaciones y forzar
+docker compose --env-file .env up -d --build --force-recreate
 
 # Ver logs
 docker-compose logs -f
 
 # Detener servicios
-docker-compose down
+docker compose --env-file .env down
+```
+### Configurar Estructura de Base de Datos
+
+Una vez que PostgreSQL esté corriendo, debemos crear la tabla de usuarios:
+
+```bash
+# Acceder al contenedor de PostgreSQL
+docker exec -it s-postgres bash
+
+# Conectar a PostgreSQL como usuario postgres
+psql -U postgres
+
+# Crear la tabla de usuarios
+CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL,
+    create_at TIMESTAMP DEFAULT NOW(),
+    pass TEXT NOT NULL
+);
+
+# Salir de PostgreSQL
+\q
+
+# Salir del contenedor
+exit
 ```
 
 ## Estado del Desarrollo
