@@ -2,8 +2,7 @@
 
 ## Descripción del Proyecto
 
-**SWYW (Send What You Want)** es un proyecto multipropósito, que funciona como una plataforma versátil capaz de adaptarse a múltiples necesidades. Su flexibilidad le permite servir como herramienta
-TO-DO, pero también cuenta con una funcionalidad especial de agenda que se activa mediante la opción "remember".
+**SWYW (Send What You Want)** es un proyecto multipropósito, que funciona como una plataforma versátil capaz de adaptarse a múltiples necesidades. Su flexibilidad le permite servir como herramienta TO-DO, pero también cuenta con una funcionalidad especial de agenda que se activa mediante la opción "remember".
 
 ### Características Principales
 
@@ -12,21 +11,25 @@ TO-DO, pero también cuenta con una funcionalidad especial de agenda que se acti
 - **Integración MCP**: La funcionalidad de agenda está en fase de desarrollo utilizando Model Context Protocol (MCP)
 - **Arquitectura Robusta**: Implementado siguiendo los mejores patrones y principios de desarrollo
 
-### Arquitectura del Backend
+---
+
+## Arquitectura del Backend
 
 El backend está desarrollado siguiendo una arquitectura limpia y principios de ingeniería de software de alta calidad:
 
-#### Patrones Implementados
+### Patrones Implementados
 - **DAO (Data Access Object)**: Para la abstracción de acceso a datos
 - **Patrón Mediador**: Para el desacoplamiento de componentes
 - **IoC (Inversión de Control)**: Para la gestión de dependencias
 - **DI (Inyección de Dependencias)**: Para un código más testeable y mantenible
 
-#### Principios SOLID
+### Principios SOLID
 El proyecto adhiere estrictamente a los principios SOLID para garantizar código limpio, mantenible y escalable.
 
-#### Screaming Architecture
+### Screaming Architecture
 Implementamos Screaming Architecture, donde la estructura del proyecto comunica claramente el propósito del negocio, no los frameworks utilizados.
+
+---
 
 ## Estructura del Proyecto
 
@@ -38,10 +41,14 @@ SWYW-PROJECT/
 └── README.md          # Este archivo
 ```
 
+---
+
 ## Requisitos Previos
 
 - **Docker**: Versión 20.10 o superior
 - **Docker Compose**: Versión 2.0 o superior
+
+---
 
 ## Configuración de la Red Docker
 
@@ -50,6 +57,8 @@ Antes de ejecutar cualquier servicio, es necesario crear la red personalizada qu
 ```bash
 docker network create swyw
 ```
+
+---
 
 ## Despliegue por Servicios Individuales
 
@@ -86,19 +95,17 @@ Este README incluye:
 Para el despliegue completo del stack utilizando Docker Compose:
 
 ```bash
-# limpiar los contenedores anteriores (si no tienes más contenedores)
+# Limpiar los contenedores anteriores (si no tienes más contenedores)
 docker rm -f $(docker ps -a -q)
-
-
-#limpiar solo los ejeecutados anteriormente
-docker ps
-
-docker rm -f [id] [id] #id de los containers
 ```
 
 ```bash
+# Limpiar solo los ejecutados anteriormente
+docker ps
+docker rm -f [id] [id] # id de los containers
+```
 
-
+```bash
 # Levantar todo el stack
 docker compose --env-file .env up -d
 
@@ -111,32 +118,57 @@ docker-compose logs -f
 # Detener servicios
 docker compose --env-file .env down
 ```
-### Configurar Estructura de Base de Datos
 
-Una vez que PostgreSQL esté corriendo, debemos crear la tabla de usuarios:
+---
 
-```bash
-# Acceder al contenedor de PostgreSQL
-docker exec -it s-postgres bash
+## Uso de la Aplicación
 
-# Conectar a PostgreSQL como usuario postgres
-psql -U postgres
+Una vez que hayas levantado los servicios con `docker compose up`, puedes acceder a la aplicación web:
 
-# Crear la tabla de usuarios
-CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    name VARCHAR(100) NOT NULL,
-    email VARCHAR(150) UNIQUE NOT NULL,
-    create_at TIMESTAMP DEFAULT NOW(),
-    pass TEXT NOT NULL
-);
+### Acceso a la Interfaz
 
-# Salir de PostgreSQL
-\q
+1. **Abrir la aplicación**: Ve a [http://localhost:8080](http://localhost:8080) en tu navegador web
 
-# Salir del contenedor
-exit
-```
+2. **Primera vez - Registro**:
+   - Si es tu primera vez usando la aplicación, encontrarás una interfaz gráfica con un sistema de login
+   - Debes registrarte con tus datos
+   - Después del registro serás redirigido automáticamente a la pantalla de inicio de sesión
+
+3. **Inicio de sesión**: Una vez registrado, inicia sesión con tus credenciales
+
+### Crear Notas y Eventos
+
+Una vez dentro de la aplicación:
+
+1. **Agregar nueva nota/evento**:
+   - Haz clic en el botón **"+"** para crear una nueva entrada
+
+2. **Completar la información**:
+   - **Título**: Escribe el título de tu nota o evento
+   - **Descripción**: Describe detalladamente tu nota. Por ejemplo:
+     ```
+     "Hoy debo reunirme con Juan, Alberto y Manuel a las 6pm para discutir el tema de acreditación"
+     ```
+
+3. **Configurar prioridad**:
+   - **Tipo**: Selecciona entre:
+     - 🔴 **Urgente**: Para tareas que requieren atención inmediata
+     - 🟡 **Normal**: Para tareas regulares
+     - 🟢 **Recurrente**: Para tareas que se repiten
+
+4. **Activar recordatorio**:
+   - **Tipo recordatorio**: Marca esta opción si quieres que la entrada funcione como un recordatorio
+   - Esta funcionalidad activa el sistema de agenda inteligente de SWYW
+
+5. **Guardar**: Confirma la creación de tu nota/evento
+
+### Funcionalidades Adicionales
+
+- **Gestión de tareas**: Visualiza, edita y elimina tus notas y eventos
+- **Sistema de recordatorios**: Las entradas marcadas como "recordatorio" activarán notificaciones
+- **Organización por prioridad**: Filtra y organiza tus tareas según su nivel de importancia
+
+---
 
 ## Estado del Desarrollo
 
@@ -146,19 +178,24 @@ exit
 - Base de datos configurada
 - Dockerización de servicios
 - Red personalizada Docker
+- Interfaz web funcional
+- Sistema de login y registro
+
 
 ### 🚧 En Desarrollo
 - Funcionalidad "remember" con integración MCP
 - Optimizaciones de performance
+- Sistema de notificaciones avanzadas
 
 ### 📋 Próximas Funcionalidades
-- API de notificaciones
+- API de notificaciones push
 - Integración con servicios externos
 - Documentación de API completa
+---
 
-## Conceptos Demostrados
+## Conceptos Aplicados
 
-Este proyecto demuestra los siguientes conceptos de containerización:
+Este proyecto estamos aplicando los siguientes conceptos de containerización y desarrollo aprendidos en clase de devops con nuestro profesor:
 
 1. **Construcción de Imágenes**: Cada servicio tiene su propio Dockerfile optimizado
 2. **Ejecución Individual**: Capacidad de ejecutar servicios por separado con `docker run`
@@ -166,16 +203,7 @@ Este proyecto demuestra los siguientes conceptos de containerización:
 4. **Orquestación**: Stack completo gestionado con Docker Compose
 5. **Separación de Responsabilidades**: Cada servicio maneja su dominio específico
 6. **Escalabilidad**: Arquitectura preparada para crecimiento horizontal
+7. **Full Stack**: Integración completa entre backend, base de datos y frontend
 
-## Contribución
-
-Para contribuir al proyecto:
-
-1. Revisa la documentación específica de cada servicio
-2. Sigue las convenciones de código establecidas
-3. Respeta los principios SOLID implementados
-4. Mantén la coherencia con la Screaming Architecture
-
----
 
 **SWYW Project** - Desarrollado con 💚 siguiendo las mejores prácticas de ingeniería de software.
