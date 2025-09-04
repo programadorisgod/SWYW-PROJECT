@@ -81,10 +81,10 @@ services:
     build:
       context: ./SWYW-FRONTEND
       dockerfile: Dockerfile
+      args:
+       VITE_API_AUTH: ${VITE_API_AUTH}
+       VITE_API_NOTES: ${VITE_API_NOTES}
     container_name: swyw-frontend
-    environment:
-      VITE_API_AUTH: ${VITE_API_AUTH}
-      VITE_API_NOTES: ${VITE_API_NOTES}
     ports:
       - "8080:80"
     networks:
