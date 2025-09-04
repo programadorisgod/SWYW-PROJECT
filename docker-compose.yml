@@ -10,6 +10,8 @@ services:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      # Montar el archivo init.sql para inicializar la base de datos con la tabla users
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - swyw
 
@@ -82,8 +84,8 @@ services:
       context: ./SWYW-FRONTEND
       dockerfile: Dockerfile
       args:
-       VITE_API_AUTH: ${VITE_API_AUTH}
-       VITE_API_NOTES: ${VITE_API_NOTES}
+        VITE_API_AUTH: ${VITE_API_AUTH}
+        VITE_API_NOTES: ${VITE_API_NOTES}
     container_name: swyw-frontend
     ports:
       - "8080:80"
