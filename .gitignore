@@ -9,7 +9,7 @@ node_modules/
 SWYW-AUTH/auth-service
 
 # Environment files (general)
-.env
+
 .env.local
 .env.production
 .env.development
