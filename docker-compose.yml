@@ -68,8 +68,34 @@ services:
         condition: service_healthy
       auth-service:
         condition: service_healthy
-#Network
+    healthcheck:
+      test:
+        ["CMD-SHELL", "wget --spider -q http://localhost:3000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  #Frontend
+
+  frontend:
+    build:
+      context: ./SWYW-FRONTEND
+      dockerfile: Dockerfile
+    container_name: swyw-frontend
+    environment:
+      VITE_API_AUTH: ${VITE_API_AUTH}
+      VITE_API_NOTES: ${VITE_API_NOTES}
+    ports:
+      - "8080:80"
+    networks:
+      - swyw
+    depends_on:
+      auth-service:
+        condition: service_healthy
+      event-service:
+        condition: service_healthy
+
+#Network
 networks:
   swyw:
     driver: bridge
