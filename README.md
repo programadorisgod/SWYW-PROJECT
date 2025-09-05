@@ -171,7 +171,11 @@ Una vez dentro de la aplicación:
    - **Título**: Escribe el título de tu nota o evento
    - **Descripción**: Describe detalladamente tu nota. Por ejemplo:
      ```
-     "Hoy debo reunirme con Juan, Alberto y Manuel a las 6pm para discutir el tema de acreditación"
+     Hoy debo reunirme con Juan, Alberto y Manuel a las 6pm para discutir el tema de acreditación
+     ```
+  - ¿Qué no hacer?
+    ```
+     Me gusta comer y por eso hablo con los que comen.
      ```
 
 3. **Configurar prioridad**:
