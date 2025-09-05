@@ -120,6 +120,20 @@ docker compose --env-file .env down
 ```
 
 ---
+### Etapa 3: Despliegue automáticamente mediante ansible
+La tercera opción o etapa, es usar ansible para que con un solo comando se configure y despligue toda la
+applicación.
+
+```bash
+  #Primero debemos ingresar a la carpeta ansible donde están todos los playbooks
+  cd ansible/
+
+  #Ahora si se va a ejectur en un host nuevo, lo mejor es configurarlo automaticamente para que tengas todas las dependencias necesarias.
+  ansible-playbook -i inventory.ini setup_enviroment.yaml
+
+  #Con todas las dependencias necesarias instaladas, ahora si podemos ejecutar el comando de despliegue.
+  ansible-playbook -i inventory.ini deploy_app.yaml
+```
 
 ## Uso de la Aplicación
 
@@ -127,8 +141,8 @@ Una vez que hayas levantado los servicios con `docker compose up`, puedes accede
 
 ### Acceso a la Interfaz
 
-1. **Abrir la aplicación**: Ve a [http://localhost:8080](http://localhost:8080) en tu navegador web
-
+1. **Abrir la aplicación**: Ve a [http://localhost:8080](http://localhost:8080) en tu navegador web si se
+está corriendo desde tu host, sino ve a  [http://ip-de-tu-vm:8080](http://[ip-de-tu-vm]:8080) si se está corriendo desde una maquina virtual.
 2. **Primera vez - Registro**:
    - Si es tu primera vez usando la aplicación, encontrarás una interfaz gráfica con un sistema de login
    - Debes registrarte con tus datos
@@ -144,6 +158,7 @@ Una vez dentro de la aplicación:
    - Haz clic en el botón **"+"** para crear una nueva entrada
 
 2. **Completar la información**:
+   Por el momento solo hay notas Inteligentes, por eso se debe seguir este esquema:
    - **Título**: Escribe el título de tu nota o evento
    - **Descripción**: Describe detalladamente tu nota. Por ejemplo:
      ```
@@ -195,7 +210,7 @@ Una vez dentro de la aplicación:
 
 ## Conceptos Aplicados
 
-Este proyecto estamos aplicando los siguientes conceptos de containerización y desarrollo aprendidos en clase de devops con nuestro profesor:
+En este proyecto estamos aplicando los siguientes conceptos de containerización y desarrollo aprendidos en clase de devops con nuestro profesor:
 
 1. **Construcción de Imágenes**: Cada servicio tiene su propio Dockerfile optimizado
 2. **Ejecución Individual**: Capacidad de ejecutar servicios por separado con `docker run`
@@ -204,6 +219,8 @@ Este proyecto estamos aplicando los siguientes conceptos de containerización y 
 5. **Separación de Responsabilidades**: Cada servicio maneja su dominio específico
 6. **Escalabilidad**: Arquitectura preparada para crecimiento horizontal
 7. **Full Stack**: Integración completa entre backend, base de datos y frontend
+8. **Automatización**: Integración con la herramienta ansible, para automatizar la configuración del Servidor
+y el despliegue de toda la app.
 
 
-**SWYW Project** - Desarrollado con 💚 siguiendo las mejores prácticas de ingeniería de software. 
+**SWYW Project** - Desarrollado con 💚 siguiendo las mejores prácticas de ingeniería de software.
