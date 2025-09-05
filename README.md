@@ -48,19 +48,15 @@ SWYW-PROJECT/
 - **Docker**: Versión 20.10 o superior
 - **Docker Compose**: Versión 2.0 o superior
 
----
+## Despliegue por Servicios Individuales
 
-## Configuración de la Red Docker
+### Configuración de la Red Docker
 
 Antes de ejecutar cualquier servicio, es necesario crear la red personalizada que conectará todos los contenedores:
 
 ```bash
 docker network create swyw
 ```
-
----
-
-## Despliegue por Servicios Individuales
 
 ### Etapa 1: Ejecución de Servicios por Separado
 
