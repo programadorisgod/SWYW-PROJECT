@@ -37,8 +37,11 @@ Implementamos Screaming Architecture, donde la estructura del proyecto comunica 
 SWYW-PROJECT/
 ├── SWYW-AUTH/          # Servicio de autenticación y base de datos
 ├── SWYW-BACKEND/       # API principal del sistema
+├── SWYW-FRONTEND/      # Interfaz web (frontend)
+├── ansible/            # Playbooks y configuración para despliegue automatizado
 ├── docker-compose.yml  # Orquestación completa del stack
-└── README.md          # Este archivo
+├── .env                # Variables de entorno globales del proyecto
+└── README.md           # Este archivo
 ```
 
 ---
@@ -85,6 +88,18 @@ Este README incluye:
 - Configuración de variables de entorno
 - Ejecución con `docker run`
 - Conexión a la red personalizada
+
+#### 3. Frontend
+
+Por último, puedes levantar el frontend de la aplicación para acceder a la interfaz web.
+
+**📁 Consulta las instrucciones detalladas en: [`SWYW-FRONTEND/README.md`](./SWYW-FRONTEND/README.md)**
+
+Este README incluye:
+- Build del Dockerfile del frontend
+- Configuración de variables de entorno para endpoints de backend
+- Ejecución del contenedor con `docker run`
+- Conexión a la red personalizada y mapeo de puertos (8080:80)
 
 ### Etapa 2: Orquestación con Docker Compose
 
