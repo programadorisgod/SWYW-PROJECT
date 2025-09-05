@@ -107,9 +107,7 @@ docker rm -f [id] [id] # id de los containers
 
 ```bash
 # Levantar todo el stack
-docker compose --env-file .env up -d
-
-# Levantar con modificaciones y forzar
+docker compose --env-file .env down #Para asegurarnos de que no hayan instancias anteriores
 docker compose --env-file .env up -d --build --force-recreate
 
 # Ver logs
