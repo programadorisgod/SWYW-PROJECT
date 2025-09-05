@@ -108,8 +108,8 @@ Esto resulta en una imagen final muy ligera (~25MB) que solo contiene:
 
 ```env
 # URL del backend API
-VITE_API_NOTES=http://backend-container:3000/api
-VITE_API_AUTH=http://localhost:4000
+VITE_API_NOTES=http://ip-host:3002/api
+VITE_API_AUTH=http://ip-host:4000
 ```
 
 ### Comunicación con Backend
@@ -155,21 +155,11 @@ npm run dev          # Servidor de desarrollo con hot reload
 # Construcción
 npm run build        # Build optimizado para producción
 
-# Linting
-npm run lint         # Ejecuta ESLint para revisar código
-
 # Preview
 npm run preview      # Preview del build de producción
 ```
 
 ## 🔧 Configuración de Desarrollo
-
-### ESLint
-El proyecto incluye configuración ESLint con reglas para:
-- TypeScript
-- React Hooks
-- React Refresh
-- Mejores prácticas modernas
 
 ### Vite
 Configurado con:
