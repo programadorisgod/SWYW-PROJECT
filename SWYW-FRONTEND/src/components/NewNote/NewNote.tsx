@@ -8,6 +8,7 @@ import { EditIcon } from "../icons/Edit";
 import { EventCheckIcon } from "../icons/EventCheck";
 import "./NewNote.css";
 import { EventIcon } from "../icons/Event";
+import { v4 as uuidv4 } from "uuid";
 
 interface HandleModalProps {
   note?: Note;
@@ -24,14 +25,14 @@ export function NewNote({
 }: HandleModalProps) {
   const [newNote, setNewNote] = useState<Note>(
     note || {
-      id: crypto.randomUUID(),
+      id: uuidv4(),
       title: "",
       description: "",
       type: "normal",
       date: new Date().toISOString(),
       remember: false,
       participants: [],
-    }
+    },
   );
   const formIcon =
     mode === "view" ? (
