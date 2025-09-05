@@ -1,0 +1,22 @@
+---
+- name: Deploy SWYW Project
+  hosts: SWYW
+  become: yes
+  vars:
+    repo_url: "https://github.com/programadorisgod/SWYW-PROJECT.git"  # Ajusta si cambia
+    project_path: "/home/sysadmin/SWYW-PROJECT"
+
+  tasks:
+    - name: Clonar o actualizar proyecto
+      git:
+        repo: "{{ repo_url }}"
+        dest: "{{ project_path }}"
+        version: master
+        update: yes
+
+    - name: Levantar stack con docker compose usando .env
+      shell: |
+        cd {{ project_path }}
+        docker compose --env-file .env up -d --build --force-recreate
+      args:
+        chdir: "{{ project_path }}"
