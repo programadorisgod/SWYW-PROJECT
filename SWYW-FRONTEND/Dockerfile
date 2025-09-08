@@ -1,5 +1,5 @@
 # 1. Construcción de la app
-FROM node:24-alpine AS build
+FROM node:22-alpine3.19-alpine AS build
 
 # Establecer directorio de trabajo
 WORKDIR /app
