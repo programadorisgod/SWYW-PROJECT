@@ -3,7 +3,7 @@ build-job:
     tags:
         - docker
     script:
-        - echo "Building the project.. $GITLAB_USER_LOGIN!."
+        - echo "Building the project... $GITLAB_USER_LOGIN!."
 
 test-job1:
     stage: test
