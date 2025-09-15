@@ -16,9 +16,7 @@ export class EventMediator {
         const nlpOutput = await nlpProcessor.process(eventToCreate);
 
         if (nlpOutput instanceof Error) {
-            console.log('error ');
             throw nlpOutput;
-            //TODO: Call to handle error method
         }
 
         const eventPayload = {
