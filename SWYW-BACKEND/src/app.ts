@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import { createEventRouter } from './features/Events/routes/event';
 import { initContainer } from './container/init-container';
+import { problemDetailsHandler } from 'apicustomerrors';
 const app = express();
 
 initContainer();
@@ -13,7 +14,7 @@ app.use(cors());
 app.use(helmet());
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use(morgan('dev'));
+app.use(morgan('tiny'));
 
 //Routes
 app.use(createEventRouter());
@@ -21,5 +22,7 @@ app.use(createEventRouter());
 app.get('/health', (_req: Request, res: Response) => {
     res.status(200).send('I am ok');
 });
+
+app.use(problemDetailsHandler());
 
 export { app };
