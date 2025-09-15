@@ -28,7 +28,7 @@ export class NlpProcessor {
             return createEventData;
         } catch (err) {
             console.error('Error parsing AI response:', err);
-            return new Error('Error parsing AI response');
+            return new Error('Error parsing AI response', { cause: err });
         }
     }
 }
