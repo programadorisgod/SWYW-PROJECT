@@ -82,3 +82,8 @@ export class eventResponseDto {
     @IsNotEmpty()
     remember: boolean;
 }
+
+export class responseAllEventsDTO {
+    pages: number;
+    items: Array<eventResponseDto>;
+}
