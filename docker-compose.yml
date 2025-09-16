@@ -63,9 +63,41 @@ services:
       DB_USER: ${DB_USER}
       DB_APP_USER_PASSWORD: ${DB_APP_USER_PASSWORD}
       DB_NAME_AUTH: ${DB_NAME_AUTH}
+      URL_SERVICE_USERS: ${URL_SERVICE_USERS}
     ports:
       - "4000:4000"
+    volumes:
+      - ./SWYW-AUTH:/app
+    networks:
+      - swyw
+    depends_on:
+      database_auth:
+        condition: service_healthy
+      user-service:
+        condition: service_healthy
+    healthcheck:
+      test:
+        ["CMD-SHELL", "wget --spider -q http://localhost:4000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  # Microservicio de user
+  user-service:
+    build:
+      context: ./SWYW-USERS
+      dockerfile: Dockerfile
+    container_name: swyw-users
+    environment:
+      DB_HOST_AUTH: database_auth
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_APP_USER_PASSWORD: ${DB_APP_USER_PASSWORD}
+      DB_NAME_AUTH: ${DB_NAME_AUTH}
+    ports:
+      - "5002:5002"
+    volumes:
+      - ./SWYW-USERS:/app
     networks:
       - swyw
     depends_on:
@@ -73,7 +105,7 @@ services:
         condition: service_healthy
     healthcheck:
       test:
-        ["CMD-SHELL", "wget --spider -q http://localhost:4000/health || exit 1"]
+        ["CMD-SHELL", "wget --spider -q http://localhost:5002/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -97,13 +129,18 @@ services:
 
     ports:
       - "3002:3000"
+    volumes:
+      - ./SWYW-BACKEND:/project:cached
+      - /project/node_modules
     networks:
       - swyw
+    command: npm run dev
     depends_on:
       database_events:
         condition: service_healthy
       auth-service:
         condition: service_healthy
+
     healthcheck:
       test:
         ["CMD-SHELL", "wget --spider -q http://localhost:3000/health || exit 1"]
