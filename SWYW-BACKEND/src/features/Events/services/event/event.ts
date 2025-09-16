@@ -16,7 +16,8 @@ export class EventService {
         return await this._repository.getEventById(id);
     };
 
-    getAllEvents = async () => {
-        return await this._repository.getAllEvents();
+    getAllEvents = async (page: number, limit: number) => {
+        const offset = (page - 1) * limit;
+        return await this._repository.getAllEvents(limit, offset);
     };
 }
