@@ -1,5 +1,5 @@
 import { DIContainer } from '@src/container/container';
-import type { Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
 import { EventMediator } from '../mediator/event-mediator';
 import { TOKENS } from '@src/container/tokens';
 import { wrapperPromise } from '@src/share/utils/network/network';
@@ -13,7 +13,7 @@ export class EventController {
     private readonly _eventService =
         DIContainer.getInstance().resolve<EventService>(TOKENS.eventService);
 
-    createEvent = async (req: Request, res: Response) => {
+    createEvent = async (req: Request, res: Response, next: NextFunction) => {
         const eventToCreate = req.body as unknown as eventDto;
 
         try {
@@ -24,31 +24,33 @@ export class EventController {
             );
 
             if (err) {
-                console.log('Error creating event:', err);
-                res.status(500).json({ error: err.message });
-                return;
+                return next(err);
             }
 
             res.status(201).json(event);
         } catch (error: unknown) {
             console.error(error);
-            res.status(500).json({ error: 'Internal Server Error' });
+            return next(error);
         }
     };
 
-    getEvents = async (req: Request, res: Response) => {
+    getEvents = async (req: Request, res: Response, next: NextFunction) => {
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+
         try {
             const [err, events] = await wrapperPromise(
-                this._eventService.getAllEvents()
+                this._eventService.getAllEvents(page, limit)
             );
+
             if (err) {
-                res.status(500).json({ error: err.message });
-                return;
+                return next(err);
             }
+
             res.status(200).json(events);
         } catch (error: unknown) {
             console.error(error);
-            res.status(500).json({ error: 'Internal Server Error' });
+            return next(error);
         }
     };
 }
