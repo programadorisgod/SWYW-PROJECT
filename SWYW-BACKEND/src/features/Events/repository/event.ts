@@ -1,5 +1,9 @@
 import { DIContainer } from '@src/container/container';
-import type { createEventDto, eventResponseDto } from '../dto/event';
+import type {
+    createEventDto,
+    eventResponseDto,
+    responseAllEventsDTO,
+} from '../dto/event';
 import { TOKENS } from '@src/container/tokens';
 import { BaseDao } from '@src/dao/base-dao';
 
@@ -33,8 +37,16 @@ export class EventRespository {
         return event;
     };
 
-    getAllEvents = async (): Promise<eventResponseDto[] | null> => {
-        const events = await this.dao.findAll();
-        return events;
+    getAllEvents = async (
+        limit: number,
+        offset: number
+    ): Promise<responseAllEventsDTO | null> => {
+        const events = await this.dao.findAll(limit, offset);
+        const totalEvents = await this.dao.count();
+        const totalPages = Math.ceil(totalEvents / limit);
+        return {
+            pages: totalPages,
+            items: events ? events : [],
+        };
     };
 }
