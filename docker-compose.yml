@@ -1,22 +1,52 @@
 services:
-  database:
+  database_auth:
     image: postgres:13.22-trixie
-    container_name: s-postgres
+    container_name: swyw-database-auth
     environment:
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      DB_USER_DEFAULT: ${DB_USER_DEFAULT}
+      DB_USER: ${DB_USER}
+      DB_NAME_AUTH: ${DB_NAME_AUTH}
+      DB_ADMIN_PASSWORD: ${DB_ADMIN_PASSWORD}
+      DB_APP_USER_PASSWORD: ${DB_APP_USER_PASSWORD}
+      DB_NAME_DEFAULT: ${DB_NAME_DEFAULT}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-      # Montar el archivo init.sql para inicializar la base de datos con la tabla users
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_auth_data:/var/lib/postgresql/data
+      # Montar los archivos para  para inicializar la base de datos con users, roles y esquemas
+      - ./SQL/auth/:/docker-entrypoint-initdb.d/
     networks:
       - swyw
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME_DEFAULT}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  database_events:
+    image: postgres:13.22-trixie
+    container_name: swyw-database-events
+    environment:
+      POSTGRES_USER: ${DB_USER_DEFAULT}
+      DB_USER: ${DB_USER}
+      DB_NAME_DEFAULT: ${DB_NAME_DEFAULT}
+      DB_NAME_EVENTS: ${DB_NAME_EVENTS}
+      DB_ADMIN_PASSWORD: ${DB_ADMIN_PASSWORD}
+      DB_APP_USER_PASSWORD: ${DB_APP_USER_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5433:5433"
+    volumes:
+      - postgres_events_data:/var/lib/postgresql/data
+      # Montar los archivos para  para inicializar la base de datos con users, roles y esquemas
+      - ./SQL/events/:/docker-entrypoint-initdb.d/
+    networks:
+      - swyw
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME_EVENTS}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -28,18 +58,18 @@ services:
       dockerfile: Dockerfile
     container_name: swyw-auth
     environment:
-      DB_HOST: database
+      DB_HOST_AUTH: database_auth
       DB_PORT: ${DB_PORT}
       DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
+      DB_APP_USER_PASSWORD: ${DB_APP_USER_PASSWORD}
+      DB_NAME_AUTH: ${DB_NAME_AUTH}
     ports:
       - "4000:4000"
 
     networks:
       - swyw
     depends_on:
-      database:
+      database_auth:
         condition: service_healthy
     healthcheck:
       test:
@@ -56,17 +86,21 @@ services:
     container_name: swyw-backend
     environment:
       PORT: ${PORT}
-      DATABASE_URL: ${DATABASE_URL}
       TYPE_DATABASE: ${TYPE_DATABASE}
       GEMINI_API_KEYI: ${GEMINI_API_KEYI}
       ENV_MODEL_AI: ${ENV_MODEL_AI}
+      DB_HOST_EVENTS: database_events
+      DB_PORT_2: ${DB_PORT_2}
+      DB_USER: ${DB_USER}
+      DB_APP_USER_PASSWORD: ${DB_APP_USER_PASSWORD}
+      DB_NAME_EVENTS: ${DB_NAME_EVENTS}
 
     ports:
       - "3002:3000"
     networks:
       - swyw
     depends_on:
-      database:
+      database_events:
         condition: service_healthy
       auth-service:
         condition: service_healthy
@@ -104,5 +138,7 @@ networks:
     name: swyw
 
 volumes:
-  postgres_data:
+  postgres_auth_data:
+    driver: local
+  postgres_events_data:
     driver: local
