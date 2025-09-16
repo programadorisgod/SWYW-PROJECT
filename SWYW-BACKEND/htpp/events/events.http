@@ -1,0 +1,5 @@
+@hostname=localhost
+@port=3002
+@host={{hostname}}:{{port}}
+
+GET http://{{host}}/api/events/?page=1&limit=5
