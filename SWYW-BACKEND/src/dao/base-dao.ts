@@ -38,9 +38,18 @@ export class BaseDao<T, E> implements IBaseDao<T, E> {
             .where(eq((this.table as any)[field], value));
         return (results as E) || null;
     }
-    async findAll(): Promise<E[] | null> {
-        const results = await this.db.select().from(this.table);
-        return (results as E[]) || null;
+    async count(): Promise<number> {
+        const count = await this.db.$count(this.table);
+        return count;
+    }
+    async findAll(limit: number, offset: number): Promise<E[] | []> {
+        const results = await this.db
+            .select()
+            .from(this.table)
+            .limit(limit)
+            .offset(offset);
+
+        return (results as E[]) || [];
     }
     async insert(entity: T): Promise<E> {
         const [result] = await this.db
