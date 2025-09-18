@@ -1,0 +1,5 @@
+- name: deploy app 
+  hosts: SWYW
+  gather_facts: yes
+  roles:
+    - CI

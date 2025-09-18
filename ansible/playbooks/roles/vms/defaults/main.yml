@@ -1,0 +1,8 @@
+vm_name: "vm-debian"
+vm_os_type: "Debian_64"
+vm_memory: "4096"   # MB
+vm_cpus: "4"
+vm_vram: "16"
+vm_disk_size: "20000"  # MB
+vm_iso: "{{ ansible_env.HOME }}/vm/iso/debian-13.0.0-amd64-netinst-custom.iso"
+vm_bridge_adapter: "wlo1"  # Ajustar segun como estes conectado a la red WiFi o Ethernet.

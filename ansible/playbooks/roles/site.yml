@@ -1,0 +1,4 @@
+- name: master playbook
+  hosts: SWYW
+  gather_facts: yes
+  roles:

@@ -1,0 +1,6 @@
+- name: Provide packages necessary for the app to function
+  hosts: SWYW
+  gather_facts: yes
+  roles:
+    - deb_packages
+    - docker
