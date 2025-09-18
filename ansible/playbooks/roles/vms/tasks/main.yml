@@ -1,0 +1,81 @@
+
+- name: Create VM
+  ansible.builtin.command:
+    cmd: >
+      VBoxManage createvm
+      --name "{{ vm_name }}"
+      --ostype "{{ vm_os_type }}"
+      --register
+  register: create_vm_result
+  failed_when: create_vm_result.rc != 0 and 'already exists' not in create_vm_result.stderr
+  changed_when: create_vm_result.rc == 0
+
+- name: Configure VM firmware and boot order
+  ansible.builtin.command:
+    cmd: >
+      VBoxManage modifyvm "{{ vm_name }}"
+      --firmware bios --boot1 dvd --boot2 disk --boot3 none --boot4 none
+
+- name: Configure VM resources
+  ansible.builtin.command:
+    cmd: >
+      VBoxManage modifyvm "{{ vm_name }}"
+      --memory {{ vm_memory }}
+      --cpus {{ vm_cpus }}
+      --audio-driver none
+      --graphicscontroller vmsvga
+      --vram {{ vm_vram }}
+
+- name: Create main disk
+  ansible.builtin.command:
+    cmd: >
+      VBoxManage createmedium disk
+      --filename "{{ ansible_env.HOME }}/VirtualBox\ VMs/{{ vm_name }}/{{ vm_name }}.vdi"
+      --size {{ vm_disk_size }}
+      --variant Standard
+  register: create_disk_result
+  failed_when: create_disk_result.rc != 0 and 'VERR_ALREADY_EXISTS' not in create_disk_result.stderr
+  changed_when: create_disk_result.rc == 0
+
+- name: Create SATA Controller
+  ansible.builtin.command:
+    cmd: VBoxManage storagectl "{{ vm_name }}" --name "SATA Controller" --add sata --controller IntelAhci
+  register: sata_controller_result
+  failed_when: sata_controller_result.rc != 0 and 'already exists' not in sata_controller_result.stderr
+  changed_when: sata_controller_result.rc == 0
+
+- name: Attach disk to VM
+  ansible.builtin.command:
+    cmd: >
+      VBoxManage storageattach "{{ vm_name }}"
+      --storagectl "SATA Controller"
+      --port 0 --device 0 --type hdd
+      --medium "{{ ansible_env.HOME }}/VirtualBox\ VMs/{{ vm_name }}/{{ vm_name }}.vdi"
+      --nonrotational on --hotpluggable on
+  register: attach_disk_result
+  failed_when: attach_disk_result.rc != 0 and 'already attached' not in attach_disk_result.stderr
+  changed_when: attach_disk_result.rc == 0
+
+- name: Configure VM Network (Bridged)
+  ansible.builtin.command:
+    cmd: VBoxManage modifyvm "{{ vm_name }}" --nic1 bridged --bridgeadapter1 {{ vm_bridge_adapter }}
+
+- name: Create IDE Controller
+  ansible.builtin.command:
+    cmd: VBoxManage storagectl "{{ vm_name }}" --name "IDE Controller" --add ide
+  register: ide_controller_result
+  failed_when: ide_controller_result.rc != 0 and 'already exists' not in ide_controller_result.stderr
+  changed_when: ide_controller_result.rc == 0
+
+- name: Attach ISO to VM (if provided)
+  ansible.builtin.command:
+    cmd: >
+      VBoxManage storageattach "{{ vm_name }}"
+      --storagectl "IDE Controller"
+      --port 0 --device 0 --type dvddrive
+      --medium "{{ vm_iso }}"
+  when: vm_iso is defined and vm_iso != ""
+
+- name: Start VM
+  ansible.builtin.command:
+    cmd: VBoxManage startvm "{{ vm_name }}" --type headless
