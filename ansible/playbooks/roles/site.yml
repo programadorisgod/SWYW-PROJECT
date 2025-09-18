@@ -2,3 +2,4 @@
   hosts: SWYW
   gather_facts: yes
   roles:
+    - docker
