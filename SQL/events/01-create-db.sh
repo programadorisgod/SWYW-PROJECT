@@ -17,8 +17,9 @@ psql -U "$POSTGRES_USER" -tc "SELECT 1 FROM pg_roles WHERE rolname='app_user'" |
 psql -U "$POSTGRES_USER" -c "CREATE ROLE app_user LOGIN PASSWORD '$DB_APP_USER_PASSWORD';"
 
 #connect to swyw_events
-psql -U "$POSTGRES_USER" -d $DB_NAME -c "CREATE SCHEMA IF NOT EXISTS core AUTHORIZATION app_user"
-psql -U "$POSTGRES_USER" -d $DB_NAME -c "REVOKE ALL ON SCHEMA public FROM PUBLIC;"
+psql -U "$POSTGRES_USER" -d "$DB_NAME" -c "CREATE SCHEMA IF NOT EXISTS core AUTHORIZATION app_user"
+psql -U "$POSTGRES_USER" -d "$DB_NAME" -c "REVOKE ALL ON SCHEMA public FROM PUBLIC;"
+psql -U "$POSTGRES_USER" -d "$DB_NAME" -c "GRANT USAGE ON SCHEMA public TO app_user;"
 
 
 #Privileges

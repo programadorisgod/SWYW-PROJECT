@@ -16,7 +16,7 @@ export class EventRespository {
         return {
             title: eventData.title,
             description: eventData.description,
-            date: eventData.date && new Date(eventData.date),
+            date: (eventData.date && new Date(eventData.date)) || new Date(),
             participants: eventData.participants || '',
             type: eventData.type,
             remember: eventData.remember,
