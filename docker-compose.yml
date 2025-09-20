@@ -37,7 +37,7 @@ services:
       DB_APP_USER_PASSWORD: ${DB_APP_USER_PASSWORD}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
-      - "5433:5433"
+      - "5433:5432"
     volumes:
       - postgres_events_data:/var/lib/postgresql/data
       # Montar los archivos para  para inicializar la base de datos con users, roles y esquemas

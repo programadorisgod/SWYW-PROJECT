@@ -1,19 +1,32 @@
 import {
-    boolean,
-    integer,
-    pgEnum,
     pgTable,
-    timestamp,
+    integer,
+    text,
     varchar,
+    boolean,
+    timestamp,
 } from 'drizzle-orm/pg-core';
 
-const eventType = pgEnum('type', ['urgent', 'normal', 'recurring']);
+export const eventTypesTable = pgTable('events_type', {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    name: varchar({ length: 100 }).notNull(),
+    sortOrder: integer().notNull(),
+});
 
 export const eventsTable = pgTable('events', {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    title: text().notNull(),
     description: varchar({ length: 255 }).notNull(),
-    date: timestamp().notNull(),
-    participants: varchar({ length: 255 }).notNull(),
+    date: timestamp(),
+    participants: varchar({ length: 255 }),
     remember: boolean().notNull(),
-    type: eventType().notNull(),
+    type: varchar({ length: 50 }).notNull(),
+    userId: integer(),
+    completed: boolean(),
 });
+
+/*
+typeEventId: integer()
+    .notNull()
+    .references(() => eventTypesTable.id),
+*/
