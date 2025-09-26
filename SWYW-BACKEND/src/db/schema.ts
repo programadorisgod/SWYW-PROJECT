@@ -5,15 +5,18 @@ import {
     varchar,
     boolean,
     timestamp,
+    pgSchema,
 } from 'drizzle-orm/pg-core';
 
-export const eventTypesTable = pgTable('events_type', {
+const core = pgSchema('core');
+
+export const eventTypesTable = core.table('events_type', {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 100 }).notNull(),
     sortOrder: integer().notNull(),
 });
 
-export const eventsTable = pgTable('events', {
+export const eventsTable = core.table('events', {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     title: text().notNull(),
     description: varchar({ length: 255 }).notNull(),
