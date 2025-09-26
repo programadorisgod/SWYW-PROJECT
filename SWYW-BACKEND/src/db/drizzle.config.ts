@@ -1,4 +1,4 @@
-import { TYPE_DATABASE, DATABASE_URL } from '@src/config/app.config';
+import { TYPE_DATABASE, DB_URL } from '@src/config/app.config';
 import { defineConfig } from 'drizzle-kit';
 import type { typeDatabase } from './types/dialect';
 
@@ -7,7 +7,7 @@ export default defineConfig({
     schema: './src/db/schema.ts',
     dialect: TYPE_DATABASE as typeDatabase,
     dbCredentials: {
-        url: DATABASE_URL,
+        url: DB_URL,
     },
     schemaFilter: ['core'],
     migrations: {
