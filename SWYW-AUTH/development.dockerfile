@@ -15,12 +15,10 @@ RUN go mod download
 COPY . .
 
 # BUILD MAIN BINARY
-RUN go build -o user-service main.go
-
+RUN go build -o auth-service main.go
 
 RUN apk update && apk add --no-cache ca-certificates && \
     apk add --no-cache wget
-
 
 
 #STAGE 2
@@ -32,8 +30,8 @@ RUN apk update && apk add --no-cache ca-certificates && \
 
 WORKDIR /root/
 
-COPY --from=builder /app/user-service .
+COPY --from=builder /app/auth-service .
 
-EXPOSE 5002
+EXPOSE 4000
 
-CMD [ "./user-service" ]
+CMD [ "./auth-service" ]

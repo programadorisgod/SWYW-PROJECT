@@ -55,7 +55,7 @@ services:
   auth-service:
     build:
       context: ./SWYW-AUTH
-      dockerfile: Dockerfile
+      dockerfile: development.dockerfile
     container_name: swyw-auth
     environment:
       DB_HOST_AUTH: database_auth
@@ -86,7 +86,7 @@ services:
   user-service:
     build:
       context: ./SWYW-USERS
-      dockerfile: Dockerfile
+      dockerfile: development.dockerfile
     container_name: swyw-users
     environment:
       DB_HOST_AUTH: database_auth
@@ -114,7 +114,7 @@ services:
   event-service:
     build:
       context: ./SWYW-BACKEND
-      dockerfile: Dockerfile
+      dockerfile: development.dockerfile
     container_name: swyw-backend
     environment:
       PORT: ${PORT}
