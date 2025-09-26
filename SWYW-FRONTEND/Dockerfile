@@ -8,7 +8,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Copiar el código y generar el build
 # Declarar los argumentos de build
 ARG VITE_API_AUTH
 ARG VITE_API_NOTES
