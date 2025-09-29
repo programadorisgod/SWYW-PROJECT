@@ -110,6 +110,17 @@ services:
       timeout: 5s
       retries: 5
 
+  fluent-bit:
+    image: cr.fluentbit.io/fluent/fluent-bit
+    container_name: fluent-bit
+    command: -c /fluent-bit/etc/fluent-bit.conf
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./parsers.conf:/fluent-bit/etc/parsers.conf
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+
   #Microservicio de eventos
   event-service:
     build:
