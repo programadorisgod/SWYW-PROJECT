@@ -1,6 +1,6 @@
 import type { eventsTable } from '@src/db/schema';
 import type { IBaseDao } from './interfaces/base-dato';
-import type { AnyPgColumn } from 'drizzle-orm/pg-core';
+import type { AnyPgColumn, PgTable } from 'drizzle-orm/pg-core';
 import { eq, type SQL } from 'drizzle-orm';
 import type { AnyTable } from '@src/share/types/database';
 
@@ -48,6 +48,22 @@ export class BaseDao<T, E> implements IBaseDao<T, E> {
             .from(this.table)
             .limit(limit)
             .offset(offset);
+
+        return (results as E[]) || [];
+    }
+    async findAllWithJoin(
+        limit: number,
+        offset: number,
+        tableJoin: PgTable,
+        firstCondition: AnyPgColumn,
+        secondCondition: AnyPgColumn
+    ): Promise<E[] | []> {
+        const results = await this.db
+            .select()
+            .from(this.table)
+            .limit(limit)
+            .offset(offset)
+            .rightJoin(tableJoin, eq(firstCondition, secondCondition));
 
         return (results as E[]) || [];
     }

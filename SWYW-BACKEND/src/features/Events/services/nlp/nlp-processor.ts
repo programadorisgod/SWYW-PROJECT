@@ -14,7 +14,8 @@ export class NlpProcessor {
         const [err, response] = await wrapperPromise(
             this._ai.generate(prompt({ messageEvent }))
         );
-
+        console.log('AI Response:', response);
+        console.log('AI Error:', err);
         if (err) {
             console.log(err);
             return err;

@@ -1,6 +1,8 @@
 export const TOKENS = {
     DAO: Symbol('DAO'),
+    DAOEventsType: Symbol('DAOEventsType'),
     repositoryEvents: Symbol('repositoryEvents'),
+    repositoryEventTypes: Symbol('repositoryEventTypes'),
     database: Symbol('database'),
     nlp: Symbol('nlp'),
     eventMediator: Symbol('eventMediator'),

@@ -8,11 +8,15 @@ export class eventDto {
 
     @IsString()
     @IsNotEmpty()
-    type: eventType;
+    typeEvent: eventType;
 
     @IsBoolean()
     @IsNotEmpty()
     remember: boolean;
+
+    @IsString()
+    @IsNotEmpty()
+    userId: string;
 }
 
 export class createEventDto {
@@ -26,36 +30,48 @@ export class createEventDto {
 
     @IsString()
     @IsNotEmpty()
+    userId: string;
+
+    @IsString()
+    @IsNotEmpty()
     participants: string;
 
     @IsString()
     @IsNotEmpty()
     date: Date;
 
-    @IsString()
-    @IsNotEmpty()
-    type: eventType;
-
     @IsBoolean()
     @IsNotEmpty()
     remember: boolean;
+
+    @IsNumber()
+    @IsNotEmpty()
+    typeEvent: eventType | number;
+
+    @IsBoolean()
+    @IsNotEmpty()
+    completed: boolean;
 }
 
 export class updateEventDto {
     title?: string;
     description?: string;
     date?: Date;
+    participants?: string;
+    typeEvent?: eventType;
+    remember?: boolean;
+    completed?: boolean;
 }
 
-export class listEventsDto {
-    @IsNumber()
-    @IsNotEmpty()
-    offset: number;
+// export class listEventsDto {
+//     @IsNumber()
+//     @IsNotEmpty()
+//     offset: number;
 
-    @IsNumber()
-    @IsNotEmpty()
-    limit: number;
-}
+//     @IsNumber()
+//     @IsNotEmpty()
+//     limit: number;
+// }
 
 export class eventResponseDto {
     @IsString()
@@ -72,15 +88,27 @@ export class eventResponseDto {
 
     @IsString()
     @IsNotEmpty()
+    userId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    participants: string;
+
+    @IsString()
+    @IsNotEmpty()
     date: Date;
 
     @IsString()
     @IsNotEmpty()
-    type: eventType;
+    typeEvent: eventType;
 
     @IsBoolean()
     @IsNotEmpty()
     remember: boolean;
+
+    @IsBoolean()
+    @IsNotEmpty()
+    completed: boolean;
 }
 
 export class responseAllEventsDTO {

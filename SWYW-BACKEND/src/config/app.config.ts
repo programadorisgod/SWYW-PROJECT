@@ -7,6 +7,7 @@ const enviromentVariables = z.object({
         .default('postgresql://user:password@localhost:5432/dbname'),
     TYPE_DATABASE: z.string().default('postgresql'),
     GEMINI_API_KEYI: z.string().default('GEMINI_API_KEYI'),
+    GITHUB_TOKEN: z.string().default('GITHUB_TOKEN'),
     ENV_MODEL_AI: z.string().default('gemini'),
     DATABASE_URL_PROD: z
         .string()
@@ -32,6 +33,7 @@ export const {
     ENV_MODEL_AI,
     DATABASE_URL_DEV,
     NODE_ENV,
+    GITHUB_TOKEN,
 } = data;
 
 export const DB_URL =

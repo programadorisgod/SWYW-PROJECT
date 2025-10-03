@@ -13,7 +13,7 @@ const core = pgSchema('core');
 export const eventTypesTable = core.table('events_type', {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 100 }).notNull(),
-    sortOrder: integer().notNull(),
+    sortOrder: integer('sort_order').notNull(),
 });
 
 export const eventsTable = core.table('events', {
@@ -23,8 +23,8 @@ export const eventsTable = core.table('events', {
     date: timestamp(),
     participants: varchar({ length: 255 }),
     remember: boolean().notNull(),
-    type: varchar({ length: 50 }).notNull(),
-    userId: integer(),
+    typeEventId: integer('typeEventId').references(() => eventTypesTable.id),
+    userId: integer().notNull(),
     completed: boolean(),
 });
 

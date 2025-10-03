@@ -21,7 +21,7 @@ export class EventMediator {
 
         const eventPayload = {
             ...nlpOutput,
-            type: eventToCreate.type,
+            type: eventToCreate.typeEvent,
             remember: eventToCreate.remember,
         };
 
