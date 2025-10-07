@@ -123,3 +123,7 @@ temp/
 # Backup files
 *.backup
 *.bak
+
+
+#flient bit
+fluent-bit.conf

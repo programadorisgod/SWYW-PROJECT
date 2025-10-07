@@ -12,10 +12,11 @@ export class EventMediator {
         // 3. Event scheduling (next)
         // 4. Event notification (next)
         const nlpProcessor = container.resolve<NlpProcessor>(TOKENS.nlp);
-
+        console.log('Processing event with NLP...', eventToCreate);
         const nlpOutput = await nlpProcessor.process(eventToCreate);
 
         if (nlpOutput instanceof Error) {
+            console.log('NLP processing error:', nlpOutput);
             throw nlpOutput;
         }
 
@@ -29,12 +30,14 @@ export class EventMediator {
             TOKENS.eventService
         );
 
+        console.log('Creating event...', eventPayload);
         const savedEvent = await eventService.create(eventPayload);
 
         // TODO: If the event has enable remember then call service to manage google calendar o service calendar,
         // else only create event without appointment event in service calendar
         if (!savedEvent.remember) return savedEvent;
 
+        console.log('Event created with remember enabled:', savedEvent);
         return savedEvent; //for test
     }
 }

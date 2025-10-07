@@ -1,0 +1,30 @@
+POST 
+curl -X POST http://localhost:3002/api/events \
+-H "Content-Type: application/json" \
+-d '{"message": "reunión con kadir, jesu, manuel y peralta a las 8pm hoy, para hacer documentos", "userId": 1, "remember": true, "typeEvent": "urgent"}'
+
+GET 
+curl -X GET http://localhost:3002/api/events/users/1\?page\=1\&limit\=2
+
+
+
+USERS
+GET USER curl -X GET http://localhost:5002/api/users\?email\=manuelito@example.com 
+GET USER BY ID curl -X GET http://localhost:5002/api/users\?id\=1
+
+curl -X POST http://localhost:4000/api/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Manuel Tapias",
+    "email": "manuelito@example.com",
+    "pass": "123456"
+  }'
+                                                        
+
+curl -X POST http://localhost:4000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "manuelito@example.com",
+    "pass": "123456"
+  }'
+                         

@@ -137,7 +137,9 @@ services:
       DB_USER: ${DB_USER}
       DB_APP_USER_PASSWORD: ${DB_APP_USER_PASSWORD}
       DB_NAME_EVENTS: ${DB_NAME_EVENTS}
-
+      URL_USER_SERVICE: ${URL_USER_SERVICE}
+      GITHUB_TOKEN: ${GITHUB_TOKEN}
+      AI_URL: ${AI_URL}
     ports:
       - "3002:3000"
     volumes:

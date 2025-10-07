@@ -5,6 +5,7 @@ import { TOKENS } from '@src/container/tokens';
 import { wrapperPromise } from '@src/share/utils/network/network';
 import type { EventService } from '../services/event/event';
 import type { eventDto } from '../dto/event';
+import { BAD_REQUEST_ERROR } from 'apicustomerrors';
 
 export class EventController {
     private readonly _eventMediator =
@@ -38,10 +39,18 @@ export class EventController {
     getEvents = async (req: Request, res: Response, next: NextFunction) => {
         const page = Number(req.query.page) || 1;
         const limit = Number(req.query.limit) || 10;
+        const { userId } = req.params;
+
+        if (!userId) {
+            const error = new BAD_REQUEST_ERROR({
+                detail: 'userId parameter is required',
+            });
+            return next(error);
+        }
 
         try {
             const [err, events] = await wrapperPromise(
-                this._eventService.getAllEvents(page, limit)
+                this._eventService.getAllEvents(page, limit, userId)
             );
 
             if (err) {

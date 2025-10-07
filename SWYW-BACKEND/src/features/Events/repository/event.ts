@@ -7,8 +7,8 @@ import type {
 import { TOKENS } from '@src/container/tokens';
 import { BaseDao } from '@src/dao/base-dao';
 import { EventTypeRepository } from './even-type';
-import { eventTypesTable } from '@src/db/schema';
-import type { InferSelectModel } from 'drizzle-orm';
+import { eventsTable, eventTypesTable } from '@src/db/schema';
+import { sql, type InferSelectModel } from 'drizzle-orm';
 
 export class EventRespository {
     private readonly dao = DIContainer.getInstance().resolve<
@@ -42,6 +42,7 @@ export class EventRespository {
         );
 
         if (!eventTypeResult) {
+            console.error('Event type not found:', eventData.typeEvent);
             throw new Error('Event type not found');
         }
 
@@ -49,10 +50,12 @@ export class EventRespository {
             ...eventData,
             typeEventId: eventTypeResult.id,
         };
+        console.log('Normalized event data:', eventNormalized);
 
         const dbEntity = this.mapDtoToDbEntity(eventNormalized);
 
         const createdEvent = await this.dao.insert(dbEntity);
+        console.log('Event created successfully:', createdEvent);
 
         return createdEvent;
     };
@@ -64,14 +67,17 @@ export class EventRespository {
 
     getAllEvents = async (
         limit: number,
-        offset: number
+        offset: number,
+        userId: string
     ): Promise<responseAllEventsDTO | null> => {
+        const filter = sql`${eventsTable.userId} = ${userId}`;
         const events = await this.dao.findAllWithJoin(
             limit,
             offset,
             eventTypesTable,
             eventTypesTable.id,
-            (this.dao as any).table.id
+            (this.dao as any).table.id,
+            filter
         );
         const totalEvents = await this.dao.count();
         const totalPages = Math.ceil(totalEvents / limit);

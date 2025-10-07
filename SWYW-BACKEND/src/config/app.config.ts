@@ -8,7 +8,7 @@ const enviromentVariables = z.object({
     TYPE_DATABASE: z.string().default('postgresql'),
     GEMINI_API_KEYI: z.string().default('GEMINI_API_KEYI'),
     GITHUB_TOKEN: z.string().default('GITHUB_TOKEN'),
-    ENV_MODEL_AI: z.string().default('gemini'),
+    ENV_MODEL_AI: z.string().default('openAI'),
     DATABASE_URL_PROD: z
         .string()
         .min(1)
@@ -16,6 +16,8 @@ const enviromentVariables = z.object({
     NODE_ENV: z
         .enum(['development', 'production', 'test'])
         .default('development'),
+    URL_USER_SERVICE: z.string().min(1).default('http://URL_USER_SERVICE:4000'),
+    AI_URL: z.string().min(1).default('http://AI_URL:5000'),
 });
 
 const { success, error, data } = enviromentVariables.safeParse(process.env);
@@ -34,6 +36,8 @@ export const {
     DATABASE_URL_DEV,
     NODE_ENV,
     GITHUB_TOKEN,
+    URL_USER_SERVICE,
+    AI_URL,
 } = data;
 
 export const DB_URL =

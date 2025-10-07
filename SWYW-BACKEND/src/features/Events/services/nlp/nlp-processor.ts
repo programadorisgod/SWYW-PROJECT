@@ -11,11 +11,10 @@ export class NlpProcessor {
         TOKENS.aiModel
     );
     async process(messageEvent: eventDto): Promise<Error | createEventDto> {
+        console.log('NLP Processor - Message Event:', messageEvent);
         const [err, response] = await wrapperPromise(
             this._ai.generate(prompt({ messageEvent }))
         );
-        console.log('AI Response:', response);
-        console.log('AI Error:', err);
         if (err) {
             console.log(err);
             return err;

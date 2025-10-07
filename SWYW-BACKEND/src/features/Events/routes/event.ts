@@ -13,7 +13,7 @@ export const createEventRouter = () => {
     );
     eventRouter.post(PREFIX, controller.createEvent);
 
-    eventRouter.get(PREFIX, controller.getEvents);
+    eventRouter.get(`${PREFIX}/users/:userId`, controller.getEvents);
 
     return eventRouter;
 };

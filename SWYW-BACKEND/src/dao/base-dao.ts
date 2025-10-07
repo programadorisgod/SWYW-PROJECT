@@ -56,17 +56,19 @@ export class BaseDao<T, E> implements IBaseDao<T, E> {
         offset: number,
         tableJoin: PgTable,
         firstCondition: AnyPgColumn,
-        secondCondition: AnyPgColumn
+        secondCondition: AnyPgColumn,
+        filter: SQL
     ): Promise<E[] | []> {
         const results = await this.db
             .select()
             .from(this.table)
+            .where(filter)
             .limit(limit)
             .offset(offset)
             .rightJoin(tableJoin, eq(firstCondition, secondCondition));
-
         return (results as E[]) || [];
     }
+
     async insert(entity: T): Promise<E> {
         const [result] = await this.db
             .insert(this.table)
